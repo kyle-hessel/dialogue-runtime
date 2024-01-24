@@ -1,6 +1,7 @@
 #include "register_types.h"
 
 #include "playwright_dialogue_manager.h"
+#include "playwright_textbox.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -14,6 +15,7 @@ void initialize_playwright_extension(ModuleInitializationLevel p_level) {
     }
 
     ClassDB::register_class<PlaywrightDialogueManager>();
+    ClassDB::register_class<PlaywrightTextbox>();
 }
 
 void terminate_playwright_extension(ModuleInitializationLevel p_level) {
