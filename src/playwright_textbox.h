@@ -8,6 +8,8 @@
 #include <godot_cpp/classes/rich_text_effect.hpp>
 #include <godot_cpp/classes/timer.hpp>
 
+#include <godot_cpp/classes/packed_scene.hpp>
+
 namespace godot {
   class PlaywrightTextbox : public CanvasLayer {
     GDCLASS(PlaywrightTextbox, CanvasLayer)
@@ -17,6 +19,10 @@ namespace godot {
       PanelContainer* textbox_panel;
       RichTextLabel* dialogue_label;
       Timer* letter_display_timer;
+
+      Ref<PackedScene> textbox_margin_scene;
+      Ref<PackedScene> textbox_panel_scene;
+      Ref<PackedScene> dialogue_label_scene;
     
       Ref<RichTextEffect> text_reveal_effect;
       Ref<RichTextEffect> dlg_trigger_effect;

@@ -3,6 +3,7 @@
 #include <godot_cpp/classes/engine.hpp>
 
 #include <godot_cpp/classes/canvas_layer.hpp>
+#include <godot_cpp/classes/control.hpp>
 #include <godot_cpp/classes/margin_container.hpp>
 #include <godot_cpp/classes/panel_container.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>
@@ -11,22 +12,12 @@
 #include <godot_cpp/classes/timer.hpp>
 
 #include <godot_cpp/variant/utility_functions.hpp>
+#include <godot_cpp/classes/packed_scene.hpp>
 
 using namespace godot;
 
 void PlaywrightTextbox::_bind_methods() {
-  ClassDB::bind_method(D_METHOD("set_textbox_margin", "_margin_container"), &PlaywrightTextbox::set_textbox_margin);
-  ClassDB::bind_method(D_METHOD("get_textbox_margin"), &PlaywrightTextbox::get_textbox_margin);
-  ClassDB::add_property("PlaywrightTextbox", PropertyInfo(Variant::OBJECT, "textbox_margin", PROPERTY_HINT_NONE), "set_textbox_margin", "get_textbox_margin");
-  ClassDB::bind_method(D_METHOD("set_textbox_panel", "_panel_container"), &PlaywrightTextbox::set_textbox_panel);
-  ClassDB::bind_method(D_METHOD("get_textbox_panel"), &PlaywrightTextbox::get_textbox_panel);
-  ClassDB::add_property("PlaywrightTextbox", PropertyInfo(Variant::OBJECT, "textbox_panel", PROPERTY_HINT_NONE), "set_textbox_panel", "get_textbox_panel");
-  ClassDB::bind_method(D_METHOD("set_dialogue_label", "_rich_text_label"), &PlaywrightTextbox::set_dialogue_label);
-  ClassDB::bind_method(D_METHOD("get_dialogue_label"), &PlaywrightTextbox::get_dialogue_label);
-  ClassDB::add_property("PlaywrightTextbox", PropertyInfo(Variant::OBJECT, "dialogue_label", PROPERTY_HINT_NONE), "set_dialogue_label", "get_dialogue_label");
-  ClassDB::bind_method(D_METHOD("set_letter_display_timer", "_timer"), &PlaywrightTextbox::set_letter_display_timer);
-  ClassDB::bind_method(D_METHOD("get_letter_display_timer"), &PlaywrightTextbox::get_letter_display_timer);
-  ClassDB::add_property("PlaywrightTextbox", PropertyInfo(Variant::OBJECT, "letter_display_timer", PROPERTY_HINT_NONE), "set_letter_display_timer", "get_letter_display_timer");
+
 }
 
 PlaywrightTextbox::PlaywrightTextbox() {
@@ -42,6 +33,8 @@ void PlaywrightTextbox::_ready() {
     set_process_mode(Node::ProcessMode::PROCESS_MODE_DISABLED);
   }
   else {
+    // Instantiate packed scenes here.
+
     ResourceLoader* re_lo = ResourceLoader::get_singleton();
     text_reveal_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_reveal.tres");
     dlg_trigger_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_trigger.tres");
