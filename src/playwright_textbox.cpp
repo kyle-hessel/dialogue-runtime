@@ -17,7 +17,9 @@
 using namespace godot;
 
 void PlaywrightTextbox::_bind_methods() {
-
+  ClassDB::bind_method(D_METHOD("set_textbox_margin_scene", "_margin_scene"), &PlaywrightTextbox::set_textbox_margin_scene);
+  ClassDB::bind_method(D_METHOD("get_textbox_margin_scene"), &PlaywrightTextbox::get_textbox_margin_scene);
+  ClassDB::add_property("PlaywrightTextbox", PropertyInfo(Variant::OBJECT, "textbox_margin_scene"), "set_textbox_margin_scene", "get_textbox_margin_scene");
 }
 
 PlaywrightTextbox::PlaywrightTextbox() {
@@ -34,6 +36,12 @@ void PlaywrightTextbox::_ready() {
   }
   else {
     // Instantiate packed scenes here.
+    if (textbox_margin_scene != nullptr)
+      textbox_margin = Object::cast_to<MarginContainer>(textbox_margin_scene->instantiate());
+      textbox_panel = Object::cast_to<PanelContainer>(textbox_margin->get_child(0));
+      dialogue_label = Object::cast_to<RichTextLabel>(textbox_panel->get_child(0)->get_child(0));
+      dialogue_label->set_text("reeeee");
+      add_child(textbox_margin);
 
     ResourceLoader* re_lo = ResourceLoader::get_singleton();
     text_reveal_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_reveal.tres");
@@ -48,8 +56,16 @@ void PlaywrightTextbox::set_textbox_margin(MarginContainer* _margin_container) {
   textbox_margin = _margin_container;
 }
 
+void PlaywrightTextbox::set_textbox_margin_scene(Ref<PackedScene> _margin_scene) {
+  textbox_margin_scene = _margin_scene;
+}
+
 MarginContainer* PlaywrightTextbox::get_textbox_margin() const {
   return textbox_margin;
+}
+
+Ref<PackedScene> PlaywrightTextbox::get_textbox_margin_scene() const {
+  return textbox_margin_scene;
 }
 
 void PlaywrightTextbox::set_textbox_panel(PanelContainer* _panel_container) {

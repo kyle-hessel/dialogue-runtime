@@ -21,8 +21,6 @@ namespace godot {
       Timer* letter_display_timer;
 
       Ref<PackedScene> textbox_margin_scene;
-      Ref<PackedScene> textbox_panel_scene;
-      Ref<PackedScene> dialogue_label_scene;
     
       Ref<RichTextEffect> text_reveal_effect;
       Ref<RichTextEffect> dlg_trigger_effect;
@@ -36,7 +34,9 @@ namespace godot {
       ~PlaywrightTextbox();
 
       void set_textbox_margin(MarginContainer* _margin_container);
+      void set_textbox_margin_scene(Ref<PackedScene> _margin_scene);
       MarginContainer* get_textbox_margin() const;
+      Ref<PackedScene> get_textbox_margin_scene() const;
       void set_textbox_panel(PanelContainer* _panel_container);
       PanelContainer* get_textbox_panel() const;
       void set_dialogue_label(RichTextLabel* _rich_text_label);
