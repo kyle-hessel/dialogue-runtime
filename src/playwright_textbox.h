@@ -8,6 +8,7 @@
 #include <godot_cpp/classes/rich_text_effect.hpp>
 #include <godot_cpp/classes/timer.hpp>
 
+#include <godot_cpp/variant/string.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>
 
 namespace godot {
@@ -25,6 +26,11 @@ namespace godot {
       Ref<RichTextEffect> text_reveal_effect;
       Ref<RichTextEffect> dlg_trigger_effect;
       Ref<RichTextEffect> dlg_end_effect;
+
+      const int MAX_WIDTH = 256;
+
+      String dialogue;
+      int letter_index;
 
       float letter_time;
       float space_time;

@@ -12,6 +12,7 @@
 #include <godot_cpp/classes/timer.hpp>
 
 #include <godot_cpp/variant/utility_functions.hpp>
+#include <godot_cpp/variant/string.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>
 
 using namespace godot;
@@ -32,9 +33,14 @@ void PlaywrightTextbox::_bind_methods() {
 }
 
 PlaywrightTextbox::PlaywrightTextbox() {
+  letter_display_timer = memnew(Timer);
+
   letter_time = 0.03;
   space_time = 0.06;
   punctuation_time = 0.2;
+  
+  dialogue = "";
+  letter_index = 0;
 }
 
 PlaywrightTextbox::~PlaywrightTextbox() {
@@ -53,6 +59,10 @@ void PlaywrightTextbox::_ready() {
       dialogue_label = Object::cast_to<RichTextLabel>(textbox_panel->get_child(0)->get_child(0));
       dialogue_label->set_text("reeeee");
       add_child(textbox_margin);
+
+      letter_display_timer->set_wait_time(0.05);
+      letter_display_timer->set_one_shot(true);
+      add_child(letter_display_timer);
 
     ResourceLoader* re_lo = ResourceLoader::get_singleton();
     text_reveal_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_reveal.tres");
