@@ -20,10 +20,21 @@ void PlaywrightTextbox::_bind_methods() {
   ClassDB::bind_method(D_METHOD("set_textbox_margin_scene", "_margin_scene"), &PlaywrightTextbox::set_textbox_margin_scene);
   ClassDB::bind_method(D_METHOD("get_textbox_margin_scene"), &PlaywrightTextbox::get_textbox_margin_scene);
   ClassDB::add_property("PlaywrightTextbox", PropertyInfo(Variant::OBJECT, "textbox_margin_scene"), "set_textbox_margin_scene", "get_textbox_margin_scene");
+  ClassDB::bind_method(D_METHOD("set_letter_time", "_letter_time"), &PlaywrightTextbox::set_letter_time);
+  ClassDB::bind_method(D_METHOD("get_letter_time"), &PlaywrightTextbox::get_letter_time);
+  ClassDB::add_property("PlaywrightTextbox", PropertyInfo(Variant::FLOAT, "letter_time"), "set_letter_time", "get_letter_time");
+  ClassDB::bind_method(D_METHOD("set_space_time", "_space_time"), &PlaywrightTextbox::set_space_time);
+  ClassDB::bind_method(D_METHOD("get_space_time"), &PlaywrightTextbox::get_space_time);
+  ClassDB::add_property("PlaywrightTextbox", PropertyInfo(Variant::FLOAT, "space_time"), "set_space_time", "get_space_time");
+  ClassDB::bind_method(D_METHOD("set_punctuation_time", "_punc_time"), &PlaywrightTextbox::set_punctuation_time);
+  ClassDB::bind_method(D_METHOD("get_punctuation_time"), &PlaywrightTextbox::get_punctuation_time);
+  ClassDB::add_property("PlaywrightTextbox", PropertyInfo(Variant::FLOAT, "punctuation_time"), "set_punctuation_time", "get_punctuation_time");
 }
 
 PlaywrightTextbox::PlaywrightTextbox() {
-  
+  letter_time = 0.03;
+  space_time = 0.06;
+  punctuation_time = 0.2;
 }
 
 PlaywrightTextbox::~PlaywrightTextbox() {
@@ -90,4 +101,28 @@ void PlaywrightTextbox::set_letter_display_timer(Timer* _timer) {
 
 Timer* PlaywrightTextbox::get_letter_display_timer() const {
   return letter_display_timer;
+}
+
+void PlaywrightTextbox::set_letter_time(float _letter_time) {
+  letter_time = _letter_time;
+}
+
+float PlaywrightTextbox::get_letter_time() const {
+  return letter_time;
+}
+
+void PlaywrightTextbox::set_space_time(float _space_time) {
+  space_time = _space_time;
+}
+
+float PlaywrightTextbox::get_space_time() const {
+  return space_time;
+}
+
+void PlaywrightTextbox::set_punctuation_time(float _punc_time) {
+  punctuation_time = _punc_time;
+}
+
+float PlaywrightTextbox::get_punctuation_time() const {
+  return punctuation_time;
 }
