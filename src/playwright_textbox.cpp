@@ -67,6 +67,7 @@ void PlaywrightTextbox::_ready() {
       letter_display_timer->set_one_shot(true);
       add_child(letter_display_timer);
 
+    // load all effect scenes so that they can be installed.
     ResourceLoader* re_lo = ResourceLoader::get_singleton();
     text_reveal_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_reveal.tres");
     dlg_trigger_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_trigger.tres");
@@ -75,6 +76,7 @@ void PlaywrightTextbox::_ready() {
     dlg_trigger_effect->set_name("DialogueTrigger");
     dlg_end_effect->set_name("DialogueEnd");
 
+    // install the reveal, trigger, and end effects.
     dialogue_label->install_effect(text_reveal_effect);
     dialogue_label->install_effect(dlg_trigger_effect);
     dialogue_label->install_effect(dlg_end_effect);
@@ -84,9 +86,6 @@ void PlaywrightTextbox::_ready() {
       if (Ref<RichTextEffect> rte = Object::cast_to<RichTextEffect>(rt_effects[e]); rte != nullptr) {
         if (rte == text_reveal_effect) {
           UtilityFunctions::print("text reveal object!");
-        }
-        else {
-          UtilityFunctions::print("Not text reveal object!");
         }
       }
     }
