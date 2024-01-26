@@ -12,6 +12,7 @@
 #include <godot_cpp/classes/timer.hpp>
 
 #include <godot_cpp/variant/utility_functions.hpp>
+#include <godot_cpp/variant/array.hpp>
 #include <godot_cpp/variant/string.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>
 
@@ -76,6 +77,13 @@ void PlaywrightTextbox::_ready() {
     dialogue_label->install_effect(text_reveal_effect);
     dialogue_label->install_effect(dlg_trigger_effect);
     dialogue_label->install_effect(dlg_end_effect);
+
+    TypedArray<RichTextEffect> rt_effects = dialogue_label->get_effects();
+    for (int e = 0; e < rt_effects.size(); e++) {
+      if (Object::cast_to<RichTextEffect>(rt_effects[e])) {
+        UtilityFunctions::print("ayoooooooo!!!!!!!");
+      }
+    }
   }
 }
 
