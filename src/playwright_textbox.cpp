@@ -71,8 +71,9 @@ void PlaywrightTextbox::_ready() {
     text_reveal_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_reveal.tres");
     dlg_trigger_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_trigger.tres");
     dlg_end_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_end.tres");
-    // text_reveal_effect->set_name("testttt");
-    // UtilityFunctions::print(text_reveal_effect->get_name());
+    text_reveal_effect->set_name("TextReveal");
+    dlg_trigger_effect->set_name("DialogueTrigger");
+    dlg_end_effect->set_name("DialogueEnd");
 
     dialogue_label->install_effect(text_reveal_effect);
     dialogue_label->install_effect(dlg_trigger_effect);
@@ -80,8 +81,13 @@ void PlaywrightTextbox::_ready() {
 
     TypedArray<RichTextEffect> rt_effects = dialogue_label->get_effects();
     for (int e = 0; e < rt_effects.size(); e++) {
-      if (Object::cast_to<RichTextEffect>(rt_effects[e])) {
-        UtilityFunctions::print("ayoooooooo!!!!!!!");
+      if (Ref<RichTextEffect> rte = Object::cast_to<RichTextEffect>(rt_effects[e]); rte != nullptr) {
+        if (rte == text_reveal_effect) {
+          UtilityFunctions::print("text reveal object!");
+        }
+        else {
+          UtilityFunctions::print("Not text reveal object!");
+        }
       }
     }
   }
