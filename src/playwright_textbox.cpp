@@ -30,6 +30,8 @@ void PlaywrightTextbox::_bind_methods() {
   ClassDB::bind_method(D_METHOD("set_punctuation_time", "_punc_time"), &PlaywrightTextbox::set_punctuation_time);
   ClassDB::bind_method(D_METHOD("get_punctuation_time"), &PlaywrightTextbox::get_punctuation_time);
   ClassDB::add_property("PlaywrightTextbox", PropertyInfo(Variant::FLOAT, "punctuation_time"), "set_punctuation_time", "get_punctuation_time");
+
+  ADD_SIGNAL(MethodInfo("finished_displaying"));
 }
 
 PlaywrightTextbox::PlaywrightTextbox() {
@@ -57,7 +59,7 @@ void PlaywrightTextbox::_ready() {
       textbox_margin = Object::cast_to<MarginContainer>(textbox_margin_scene->instantiate());
       textbox_panel = Object::cast_to<PanelContainer>(textbox_margin->get_child(0));
       dialogue_label = Object::cast_to<RichTextLabel>(textbox_panel->get_child(0)->get_child(0));
-      dialogue_label->set_text("reeeee");
+      // dialogue_label->set_text("reeeee");
       add_child(textbox_margin);
 
       letter_display_timer->set_wait_time(0.05);
@@ -68,8 +70,12 @@ void PlaywrightTextbox::_ready() {
     text_reveal_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_reveal.tres");
     dlg_trigger_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_trigger.tres");
     dlg_end_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_end.tres");
-    text_reveal_effect->set_name("testttt");
-    UtilityFunctions::print(text_reveal_effect->get_name());
+    // text_reveal_effect->set_name("testttt");
+    // UtilityFunctions::print(text_reveal_effect->get_name());
+
+    dialogue_label->install_effect(text_reveal_effect);
+    dialogue_label->install_effect(dlg_trigger_effect);
+    dialogue_label->install_effect(dlg_end_effect);
   }
 }
 
