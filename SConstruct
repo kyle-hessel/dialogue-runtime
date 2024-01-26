@@ -18,14 +18,14 @@ sources = Glob("src/*.cpp")
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(
-        "bin/libplaywright.{}.{}.framework/libplaywright.{}.{}".format(
+        "/home/pollutedmind/Projects/Gamedev/ToolDev/PlaywrightTestbed/addons/playwright_runtime/libplaywright.{}.{}.framework/libplaywright.{}.{}".format(
             env["platform"], env["target"], env["platform"], env["target"]
         ),
         source=sources,
     )
 else:
     library = env.SharedLibrary(
-        "bin/libplaywright{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
+        "/home/pollutedmind/Projects/Gamedev/ToolDev/PlaywrightTestbed/addons/playwright_runtime/libplaywright{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
         source=sources,
     )
 
