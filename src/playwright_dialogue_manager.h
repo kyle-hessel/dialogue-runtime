@@ -5,21 +5,21 @@
 
 namespace godot {
 
-    class PlaywrightDialogueManager : public Control {
-        GDCLASS(PlaywrightDialogueManager, Control)
+	class PlaywrightDialogueManager : public Control {
+		GDCLASS(PlaywrightDialogueManager, Control)
 
-        private:
-            int branch_index;
-        
-        protected:
-            static void _bind_methods();
+		private:
+			int branch_index;
+				
+		protected:
+			static void _bind_methods();
 
-        public:
-            PlaywrightDialogueManager();
-            ~PlaywrightDialogueManager();
-        
-        void _ready() override;
-    };
+		public:
+			PlaywrightDialogueManager();
+			~PlaywrightDialogueManager();
+				
+			void _ready() override;
+	};
 
 }
 

@@ -11,7 +11,7 @@ void PlaywrightDialogueManager::_bind_methods() {
 }
 
 PlaywrightDialogueManager::PlaywrightDialogueManager() {
-    branch_index = 0;
+	branch_index = 0;
 }
 
 PlaywrightDialogueManager::~PlaywrightDialogueManager() {
@@ -19,10 +19,10 @@ PlaywrightDialogueManager::~PlaywrightDialogueManager() {
 }
 
 void PlaywrightDialogueManager::_ready() {
-    if (Engine::get_singleton()->is_editor_hint()) {
-        set_process_mode(Node::ProcessMode::PROCESS_MODE_DISABLED);
-    }
-    else {
-        UtilityFunctions::print("is this thing on?");
-    }
+	if (Engine::get_singleton()->is_editor_hint()) {
+		set_process_mode(Node::ProcessMode::PROCESS_MODE_DISABLED);
+	}
+	else {
+		UtilityFunctions::print("is this thing on?");
+	}
 }
