@@ -13,7 +13,7 @@
 using namespace godot;
 
 RichTextEffectReveal::RichTextEffectReveal() {
-	bbcode = "reveal";
+
 }
 
 RichTextEffectReveal::~RichTextEffectReveal() {
@@ -26,7 +26,7 @@ void RichTextEffectReveal::_bind_methods() {
 
 bool RichTextEffectReveal::_process_custom_fx(const Ref<CharFXTransform> &char_fx) const {
 	if (owning_textbox != nullptr) {
-		UtilityFunctions::print(UtilityFunctions::var_to_str(char_fx->is_visible()));
+		//UtilityFunctions::print(UtilityFunctions::var_to_str(char_fx->is_visible()));
 		if (char_fx->get_relative_index() > owning_textbox->reveal_pos) {
 			char_fx->set_visibility(false);
 		}

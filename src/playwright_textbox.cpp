@@ -8,6 +8,7 @@
 #include <godot_cpp/classes/margin_container.hpp>
 #include <godot_cpp/classes/panel_container.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>
+#include <godot_cpp/classes/resource.hpp>
 #include <godot_cpp/classes/rich_text_label.hpp>
 #include <godot_cpp/classes/rich_text_effect.hpp>
 #include <godot_cpp/classes/timer.hpp>
@@ -80,7 +81,7 @@ void PlaywrightTextbox::_ready() {
 		// load all effect scenes so that they can be installed.
 		ResourceLoader* re_lo = ResourceLoader::get_singleton();
 		// This is created as a local variable to avoid a circular dependecy in the header of this class and PlaywrightTextbox. Wahoo!
-		RichTextEffectReveal* text_reveal_effect = memnew(RichTextEffectReveal);
+		Ref<RichTextEffectReveal> text_reveal_effect = re_lo->load("res://addons/playwright_runtime/resources/rich_text_effect_reveal.tres");
 		dlg_trigger_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_trigger.tres");
 		dlg_end_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_end.tres");
 		text_reveal_effect->fetch_text_server();
@@ -111,6 +112,9 @@ void PlaywrightTextbox::_ready() {
 				}
 			}
 		}
+		
+		// ### this was just a test to see if the reveal effect was working; delete!
+		//advance_letter = true;
 	}
 }
 

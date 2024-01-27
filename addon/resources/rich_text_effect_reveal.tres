@@ -1,0 +1,6 @@
+[gd_resource type="RichTextEffectReveal" load_steps=2 format=3 uid="uid://c7jbjyi263jqu"]
+
+[ext_resource type="Script" path="res://addons/playwright_runtime/scripts/rich_text_effect_reveal.gd" id="1_bpgfc"]
+
+[resource]
+script = ExtResource("1_bpgfc")
