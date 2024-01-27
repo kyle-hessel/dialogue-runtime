@@ -1,6 +1,8 @@
 #ifndef PLAYWRIGHT_TEXTBOX_H
 #define PLAYWRIGHT_TEXTBOX_H
 
+#include "rich_text_effect_reveal.h"
+
 #include <godot_cpp/classes/canvas_layer.hpp>
 #include <godot_cpp/classes/margin_container.hpp>
 #include <godot_cpp/classes/panel_container.hpp>
@@ -23,7 +25,7 @@ namespace godot {
 
       Ref<PackedScene> textbox_margin_scene;
     
-      Ref<RichTextEffect> text_reveal_effect;
+      RichTextEffectReveal* text_reveal_effect;
       Ref<RichTextEffect> dlg_trigger_effect;
       Ref<RichTextEffect> dlg_end_effect;
 

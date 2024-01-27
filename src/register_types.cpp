@@ -2,6 +2,7 @@
 
 #include "playwright_dialogue_manager.h"
 #include "playwright_textbox.h"
+#include "rich_text_effect_reveal.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -16,6 +17,7 @@ void initialize_playwright_extension(ModuleInitializationLevel p_level) {
 
     ClassDB::register_class<PlaywrightDialogueManager>();
     ClassDB::register_class<PlaywrightTextbox>();
+    ClassDB::register_class<RichTextEffectReveal>();
 }
 
 void terminate_playwright_extension(ModuleInitializationLevel p_level) {

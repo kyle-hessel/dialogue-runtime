@@ -1,4 +1,5 @@
 #include "playwright_textbox.h"
+#include "rich_text_effect_reveal.h"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
 
@@ -51,107 +52,111 @@ PlaywrightTextbox::~PlaywrightTextbox() {
 }
 
 void PlaywrightTextbox::_ready() {
-  if (Engine::get_singleton()->is_editor_hint()) {
-    set_process_mode(Node::ProcessMode::PROCESS_MODE_DISABLED);
-  }
-  else {
-    // Instantiate packed scenes here.
-    if (textbox_margin_scene != nullptr)
-      textbox_margin = Object::cast_to<MarginContainer>(textbox_margin_scene->instantiate());
-      textbox_panel = Object::cast_to<PanelContainer>(textbox_margin->get_child(0));
-      dialogue_label = Object::cast_to<RichTextLabel>(textbox_panel->get_child(0)->get_child(0));
-      // dialogue_label->set_text("reeeee");
-      add_child(textbox_margin);
+	if (Engine::get_singleton()->is_editor_hint()) {
+		set_process_mode(Node::ProcessMode::PROCESS_MODE_DISABLED);
+	}
+	else {
+		// Instantiate PackedScenes here.
+		if (textbox_margin_scene != nullptr) {
+			textbox_margin = Object::cast_to<MarginContainer>(textbox_margin_scene->instantiate());
+			textbox_panel = Object::cast_to<PanelContainer>(textbox_margin->get_child(0));
+			dialogue_label = Object::cast_to<RichTextLabel>(textbox_panel->get_child(0)->get_child(0));
+			dialogue_label->set_text("reeeee");
+			add_child(textbox_margin);
+			
+			// set up some properties on the Timer, as it isn't a part of the PackedScene.
+			letter_display_timer->set_wait_time(0.05);
+			letter_display_timer->set_one_shot(true);
+			add_child(letter_display_timer);
+		}
 
-      letter_display_timer->set_wait_time(0.05);
-      letter_display_timer->set_one_shot(true);
-      add_child(letter_display_timer);
+		// load all effect scenes so that they can be installed.
+		ResourceLoader* re_lo = ResourceLoader::get_singleton();
+		text_reveal_effect = memnew(RichTextEffectReveal);
+		dlg_trigger_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_trigger.tres");
+		dlg_end_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_end.tres");
+		text_reveal_effect->set_name("TextReveal");
+		dlg_trigger_effect->set_name("DialogueTrigger");
+		dlg_end_effect->set_name("DialogueEnd");
 
-    // load all effect scenes so that they can be installed.
-    ResourceLoader* re_lo = ResourceLoader::get_singleton();
-    text_reveal_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_reveal.tres");
-    dlg_trigger_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_trigger.tres");
-    dlg_end_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_end.tres");
-    text_reveal_effect->set_name("TextReveal");
-    dlg_trigger_effect->set_name("DialogueTrigger");
-    dlg_end_effect->set_name("DialogueEnd");
+		// install the reveal, trigger, and end effects.
+		dialogue_label->install_effect(text_reveal_effect);
+		dialogue_label->install_effect(dlg_trigger_effect);
+		dialogue_label->install_effect(dlg_end_effect);
 
-    // install the reveal, trigger, and end effects.
-    dialogue_label->install_effect(text_reveal_effect);
-    dialogue_label->install_effect(dlg_trigger_effect);
-    dialogue_label->install_effect(dlg_end_effect);
-
-    TypedArray<RichTextEffect> rt_effects = dialogue_label->get_effects();
-    for (int e = 0; e < rt_effects.size(); e++) {
-      if (Ref<RichTextEffect> rte = Object::cast_to<RichTextEffect>(rt_effects[e]); rte != nullptr) {
-        if (rte == text_reveal_effect) {
-          UtilityFunctions::print("text reveal object!");
-        }
-      }
-    }
-  }
+		TypedArray<RichTextEffect> rt_effects = dialogue_label->get_effects();
+		for (int e = 0; e < rt_effects.size(); e++) {
+			if (Ref<RichTextEffect> rte = Object::cast_to<RichTextEffect>(rt_effects[e]); rte != nullptr) {
+				if (rte == text_reveal_effect) {
+					UtilityFunctions::print(text_reveal_effect->get_name());
+				}
+			}
+		}
+	}
 }
 
+
+// getters and setters
 void PlaywrightTextbox::set_textbox_margin(MarginContainer* _margin_container) {
-  textbox_margin = _margin_container;
+	textbox_margin = _margin_container;
 }
 
 void PlaywrightTextbox::set_textbox_margin_scene(Ref<PackedScene> _margin_scene) {
-  textbox_margin_scene = _margin_scene;
+	textbox_margin_scene = _margin_scene;
 }
 
 MarginContainer* PlaywrightTextbox::get_textbox_margin() const {
-  return textbox_margin;
+	return textbox_margin;
 }
 
 Ref<PackedScene> PlaywrightTextbox::get_textbox_margin_scene() const {
-  return textbox_margin_scene;
+	return textbox_margin_scene;
 }
 
 void PlaywrightTextbox::set_textbox_panel(PanelContainer* _panel_container) {
-  textbox_panel = _panel_container;
+	textbox_panel = _panel_container;
 }
 
 PanelContainer* PlaywrightTextbox::get_textbox_panel() const {
-  return textbox_panel;
+	return textbox_panel;
 }
 
 void PlaywrightTextbox::set_dialogue_label(RichTextLabel* _rich_text_label) {
-  dialogue_label = _rich_text_label;
+	dialogue_label = _rich_text_label;
 }
 
 RichTextLabel* PlaywrightTextbox::get_dialogue_label() const {
-  return dialogue_label;
+	return dialogue_label;
 }
 
 void PlaywrightTextbox::set_letter_display_timer(Timer* _timer) {
-  letter_display_timer = _timer;
+	letter_display_timer = _timer;
 }
 
 Timer* PlaywrightTextbox::get_letter_display_timer() const {
-  return letter_display_timer;
+	return letter_display_timer;
 }
 
 void PlaywrightTextbox::set_letter_time(float _letter_time) {
-  letter_time = _letter_time;
+	letter_time = _letter_time;
 }
 
 float PlaywrightTextbox::get_letter_time() const {
-  return letter_time;
+	return letter_time;
 }
 
 void PlaywrightTextbox::set_space_time(float _space_time) {
-  space_time = _space_time;
+	space_time = _space_time;
 }
 
 float PlaywrightTextbox::get_space_time() const {
-  return space_time;
+	return space_time;
 }
 
 void PlaywrightTextbox::set_punctuation_time(float _punc_time) {
-  punctuation_time = _punc_time;
+	punctuation_time = _punc_time;
 }
 
 float PlaywrightTextbox::get_punctuation_time() const {
-  return punctuation_time;
+	return punctuation_time;
 }
