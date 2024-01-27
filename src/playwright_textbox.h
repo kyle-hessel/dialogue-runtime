@@ -1,8 +1,6 @@
 #ifndef PLAYWRIGHT_TEXTBOX_H
 #define PLAYWRIGHT_TEXTBOX_H
 
-#include "rich_text_effect_reveal.h"
-
 #include <godot_cpp/classes/canvas_layer.hpp>
 #include <godot_cpp/classes/margin_container.hpp>
 #include <godot_cpp/classes/panel_container.hpp>
@@ -24,8 +22,7 @@ namespace godot {
 			Timer* letter_display_timer;
 
 			Ref<PackedScene> textbox_margin_scene;
-				
-			RichTextEffectReveal* text_reveal_effect;
+			
 			Ref<RichTextEffect> dlg_trigger_effect;
 			Ref<RichTextEffect> dlg_end_effect;
 
@@ -44,6 +41,16 @@ namespace godot {
 		public:
 			PlaywrightTextbox();
 			~PlaywrightTextbox();
+			
+			int reveal_pos;
+			bool advance_letter;
+			
+			void begin_display_dialogue(String& text_to_display);
+			void increment_letter();
+			void display_line();
+			
+			void _on_letter_display_timeout();
+			void _on_signal_show_entire_line();
 
 			void set_textbox_margin(MarginContainer* _margin_container);
 			void set_textbox_margin_scene(Ref<PackedScene> _margin_scene);

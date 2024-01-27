@@ -32,8 +32,13 @@ void PlaywrightTextbox::_bind_methods() {
   ClassDB::bind_method(D_METHOD("set_punctuation_time", "_punc_time"), &PlaywrightTextbox::set_punctuation_time);
   ClassDB::bind_method(D_METHOD("get_punctuation_time"), &PlaywrightTextbox::get_punctuation_time);
   ClassDB::add_property("PlaywrightTextbox", PropertyInfo(Variant::FLOAT, "punctuation_time"), "set_punctuation_time", "get_punctuation_time");
+  
+  ClassDB::bind_method(D_METHOD("_on_letter_display_timeout"), &PlaywrightTextbox::_on_letter_display_timeout);
+  ClassDB::bind_method(D_METHOD("_on_signal_show_entire_line"), &PlaywrightTextbox::_on_signal_show_entire_line);
+  ClassDB::bind_method(D_METHOD("increment_letter"), &PlaywrightTextbox::increment_letter);
 
   ADD_SIGNAL(MethodInfo("finished_displaying"));
+  
 }
 
 PlaywrightTextbox::PlaywrightTextbox() {
@@ -45,6 +50,9 @@ PlaywrightTextbox::PlaywrightTextbox() {
   
   dialogue = "";
   letter_index = 0;
+  
+  reveal_pos = 0;
+  advance_letter = false;
 }
 
 PlaywrightTextbox::~PlaywrightTextbox() {
@@ -61,7 +69,6 @@ void PlaywrightTextbox::_ready() {
 			textbox_margin = Object::cast_to<MarginContainer>(textbox_margin_scene->instantiate());
 			textbox_panel = Object::cast_to<PanelContainer>(textbox_margin->get_child(0));
 			dialogue_label = Object::cast_to<RichTextLabel>(textbox_panel->get_child(0)->get_child(0));
-			dialogue_label->set_text("reeeee");
 			add_child(textbox_margin);
 			
 			// set up some properties on the Timer, as it isn't a part of the PackedScene.
@@ -72,29 +79,60 @@ void PlaywrightTextbox::_ready() {
 
 		// load all effect scenes so that they can be installed.
 		ResourceLoader* re_lo = ResourceLoader::get_singleton();
-		text_reveal_effect = memnew(RichTextEffectReveal);
+		// This is created as a local variable to avoid a circular dependecy in the header of this class and PlaywrightTextbox. Wahoo!
+		RichTextEffectReveal* text_reveal_effect = memnew(RichTextEffectReveal);
 		dlg_trigger_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_trigger.tres");
 		dlg_end_effect = re_lo->load("res://assets/UI/dialogue/text/dialogue_label_end.tres");
+		text_reveal_effect->fetch_text_server();
+		text_reveal_effect->owning_textbox = this;
 		text_reveal_effect->set_name("TextReveal");
 		dlg_trigger_effect->set_name("DialogueTrigger");
 		dlg_end_effect->set_name("DialogueEnd");
-
+		
 		// install the reveal, trigger, and end effects.
 		dialogue_label->install_effect(text_reveal_effect);
 		dialogue_label->install_effect(dlg_trigger_effect);
 		dialogue_label->install_effect(dlg_end_effect);
+		
+		dialogue_label->parse_bbcode("[reveal]reeeee[/reveal]");
 
 		TypedArray<RichTextEffect> rt_effects = dialogue_label->get_effects();
 		for (int e = 0; e < rt_effects.size(); e++) {
 			if (Ref<RichTextEffect> rte = Object::cast_to<RichTextEffect>(rt_effects[e]); rte != nullptr) {
+				// if the RichTextEffect in question is a RichTextEffectReveal, wire up some signals.
 				if (rte == text_reveal_effect) {
 					UtilityFunctions::print(text_reveal_effect->get_name());
+					
+					// Signals for incrementing the text reveal effect.
+					letter_display_timer->connect("timeout", Callable(this, "_on_letter_display_timeout"));
+					letter_display_timer->connect("timeout", Callable(this, "increment_letter"));
+					// Signal for displaying the entire line at once, skipping the above effect.
+					connect("finished_displaying", Callable(this, "_on_signal_show_entire_line"));
 				}
 			}
 		}
 	}
 }
 
+void PlaywrightTextbox::begin_display_dialogue(String& text_to_display) {
+	
+}
+
+void PlaywrightTextbox::increment_letter() {
+	
+}
+
+void PlaywrightTextbox::display_line() {
+	
+}
+
+void PlaywrightTextbox::_on_letter_display_timeout() {
+	advance_letter = true;
+}
+
+void PlaywrightTextbox::_on_signal_show_entire_line() {
+	reveal_pos = 500;
+}
 
 // getters and setters
 void PlaywrightTextbox::set_textbox_margin(MarginContainer* _margin_container) {
