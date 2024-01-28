@@ -66,15 +66,15 @@ void PlaywrightTextbox::_ready() {
 		else {
 				// Instantiate PackedScenes here.
 				if (textbox_margin_scene != nullptr) {
-					textbox_margin = Object::cast_to<MarginContainer>(textbox_margin_scene->instantiate());
-					textbox_panel = Object::cast_to<PanelContainer>(textbox_margin->get_child(0));
-					dialogue_label = Object::cast_to<RichTextLabel>(textbox_panel->get_child(0)->get_child(0));
-					add_child(textbox_margin);
+						textbox_margin = Object::cast_to<MarginContainer>(textbox_margin_scene->instantiate());
+						textbox_panel = Object::cast_to<PanelContainer>(textbox_margin->get_child(0));
+						dialogue_label = Object::cast_to<RichTextLabel>(textbox_panel->get_child(0)->get_child(0));
+						add_child(textbox_margin);
 			
-					// set up some properties on the Timer, as it isn't a part of the PackedScene.
-					letter_display_timer->set_wait_time(0.05);
-					letter_display_timer->set_one_shot(true);
-					add_child(letter_display_timer);
+						// set up some properties on the Timer, as it isn't a part of the PackedScene.
+						letter_display_timer->set_wait_time(0.05);
+						letter_display_timer->set_one_shot(true);
+						add_child(letter_display_timer);
 				}
 
 				// load all effect scenes so that they can be installed.
