@@ -45,7 +45,7 @@ namespace godot {
 			int reveal_pos;
 			bool advance_letter;
 			
-			void begin_display_dialogue(String& text_to_display);
+			void begin_display_dialogue(String text_to_display);
 			void increment_letter();
 			void display_line();
 			
