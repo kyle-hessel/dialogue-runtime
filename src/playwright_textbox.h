@@ -2,6 +2,7 @@
 #define PLAYWRIGHT_TEXTBOX_H
 
 #include <godot_cpp/classes/canvas_layer.hpp>
+#include <godot_cpp/classes/packed_scene.hpp>
 #include <godot_cpp/classes/margin_container.hpp>
 #include <godot_cpp/classes/panel_container.hpp>
 #include <godot_cpp/classes/rich_text_label.hpp>
@@ -9,7 +10,6 @@
 #include <godot_cpp/classes/timer.hpp>
 
 #include <godot_cpp/variant/string.hpp>
-#include <godot_cpp/classes/packed_scene.hpp>
 
 namespace godot {
 	class PlaywrightTextbox : public CanvasLayer {
