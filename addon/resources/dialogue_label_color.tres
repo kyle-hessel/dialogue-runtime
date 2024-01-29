@@ -1,0 +1,6 @@
+[gd_resource type="RichTextEffect" load_steps=2 format=3 uid="uid://ch2ss18gbxadd"]
+
+[ext_resource type="Script" path="res://addons/playwright_runtime/scripts/dialogue_label_color.gd" id="1_6dnkc"]
+
+[resource]
+script = ExtResource("1_6dnkc")

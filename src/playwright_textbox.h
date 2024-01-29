@@ -16,14 +16,10 @@ namespace godot {
 		GDCLASS(PlaywrightTextbox, CanvasLayer)
 			
 		private:
-			MarginContainer* textbox_margin;
 			PanelContainer* textbox_panel;
 			Timer* letter_display_timer;
-
-			Ref<PackedScene> textbox_margin_scene;
 			
 			Ref<RichTextEffect> dlg_trigger_effect;
-			Ref<RichTextEffect> dlg_end_effect;
 
 			const int MAX_WIDTH = 256;
 
@@ -41,7 +37,12 @@ namespace godot {
 		protected:
 			static void _bind_methods();
 
+			MarginContainer* textbox_margin;
+
+			Ref<PackedScene> textbox_margin_scene;
+
 			RichTextLabel* dialogue_label;
+			Ref<RichTextEffect> dlg_end_effect;
 
 		public:
 			PlaywrightTextbox();

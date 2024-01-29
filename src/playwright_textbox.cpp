@@ -99,8 +99,6 @@ void PlaywrightTextbox::_ready() {
 			if (Ref<RichTextEffect> rte = Object::cast_to<RichTextEffect>(rt_effects[e]); rte != nullptr) {
 				// if the RichTextEffect in question is a RichTextEffectReveal, wire up some signals.
 				if (rte == text_reveal_effect) {
-					UtilityFunctions::print(text_reveal_effect->get_name());
-					
 					// Signals for incrementing the text reveal effect.
 					letter_display_timer->connect("timeout", Callable(this, "_on_letter_display_timeout"));
 					letter_display_timer->connect("timeout", Callable(this, "increment_letter"));

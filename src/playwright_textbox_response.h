@@ -28,7 +28,7 @@ namespace godot {
 
             int player_selection;
 
-            void begin_display_response(TypedArray<String>);
+            void begin_display_response(TypedArray<String> text_to_display);
             void select_response(const Ref<InputEvent> &event);
             void color_text_field_at_pos(int pos);
         

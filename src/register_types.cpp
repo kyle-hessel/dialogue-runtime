@@ -2,6 +2,7 @@
 
 #include "playwright_dialogue_manager.h"
 #include "playwright_textbox.h"
+#include "playwright_textbox_response.h"
 #include "rich_text_effect_reveal.h"
 
 #include <gdextension_interface.h>
@@ -17,6 +18,7 @@ void initialize_playwright_extension(ModuleInitializationLevel p_level) {
 
 	ClassDB::register_class<PlaywrightDialogueManager>();
 	ClassDB::register_class<PlaywrightTextbox>();
+	ClassDB::register_class<PlaywrightTextboxResponse>();
 	ClassDB::register_class<RichTextEffectReveal>();
 }
 
