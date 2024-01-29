@@ -18,7 +18,6 @@ namespace godot {
 		private:
 			MarginContainer* textbox_margin;
 			PanelContainer* textbox_panel;
-			RichTextLabel* dialogue_label;
 			Timer* letter_display_timer;
 
 			Ref<PackedScene> textbox_margin_scene;
@@ -35,8 +34,14 @@ namespace godot {
 			float space_time;
 			float punctuation_time;
 
+			void begin_display_dialogue(String text_to_display);
+			void increment_letter();
+			void display_line();
+
 		protected:
 			static void _bind_methods();
+
+			RichTextLabel* dialogue_label;
 
 		public:
 			PlaywrightTextbox();
@@ -44,10 +49,6 @@ namespace godot {
 			
 			int reveal_pos;
 			bool advance_letter;
-			
-			void begin_display_dialogue(String text_to_display);
-			void increment_letter();
-			void display_line();
 			
 			void _on_letter_display_timeout();
 			void _on_signal_show_entire_line();

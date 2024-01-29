@@ -4,6 +4,7 @@
 #include "playwright_textbox.h"
 
 #include <godot_cpp/classes/packed_scene.hpp>
+#include <godot_cpp/classes/input_event.hpp>
 #include <godot_cpp/classes/rich_text_effect.hpp>
 #include <godot_cpp/classes/rich_text_label.hpp>
 #include <godot_cpp/classes/v_box_container.hpp>
@@ -26,6 +27,10 @@ namespace godot {
             TypedArray<String> dialogues;
 
             int player_selection;
+
+            void begin_display_response(TypedArray<String>);
+            void select_response(const Ref<InputEvent> &event);
+            void color_text_field_at_pos(int pos);
         
         protected:
             static void _bind_methods();
@@ -37,6 +42,7 @@ namespace godot {
 
 
             void _ready() override;
+            void _unhandled_input(const Ref<InputEvent> &event) override;
     };
 }
 
