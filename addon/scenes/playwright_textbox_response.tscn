@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://1vb7hdv2nkhb"]
+
+[ext_resource type="PackedScene" uid="uid://dai368fbxbroe" path="res://addons/playwright_runtime/scenes/textbox_margin_response.tscn" id="1_fdxlt"]
+
+[node name="PlaywrightTextboxResponse" type="PlaywrightTextboxResponse"]
+textbox_margin_scene = ExtResource("1_fdxlt")
+process_mode = 4
