@@ -2,6 +2,7 @@
 
 #include "playwright_textbox.h"
 #include "playwright_textbox_response.h"
+#include "playwright_dialogue.h"
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/engine.hpp>
@@ -23,6 +24,16 @@ void PlaywrightDialogueManager::_bind_methods() {
 
 PlaywrightDialogueManager::PlaywrightDialogueManager() {
 	branch_index = 0;
+
+	player_selection = 0;
+
+	branch_index = 0;
+	branch_ended = false;
+	line_index = 0;
+
+	is_npc_dialogue_active = false;
+	is_player_dialogue_active = false;
+	can_advance_line = false;
 }
 
 PlaywrightDialogueManager::~PlaywrightDialogueManager() {

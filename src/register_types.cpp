@@ -1,5 +1,6 @@
 #include "register_types.h"
 
+#include "playwright_dialogue.h"
 #include "playwright_dialogue_manager.h"
 #include "playwright_textbox.h"
 #include "playwright_textbox_response.h"
@@ -16,10 +17,20 @@ void initialize_playwright_extension(ModuleInitializationLevel p_level) {
 		return;
 	}
 
+	ClassDB::register_class<PlaywrightDialogue>();
 	ClassDB::register_class<PlaywrightDialogueManager>();
 	ClassDB::register_class<PlaywrightTextbox>();
 	ClassDB::register_class<PlaywrightTextboxResponse>();
 	ClassDB::register_class<RichTextEffectReveal>();
+
+	// I think this will make these all runtime in Godot 4.3, adding them now:
+	// alternatively, use register_class(false, true, true) - perhaps.
+	// see https://github.com/godotengine/godot-cpp/pull/1256/commits/fb884573ea1a0ec36d1968bf12a667cd17023d38, specifically the changes to class_db.hpp.
+	//ClassDB::register_class<PlaywrightDialogue>(); // not just a runtime class!
+	//ClassDB::register_runtime_class<PlaywrightDialogueManager>();
+	//ClassDB::register_runtime_class<PlaywrightTextbox>();
+	//ClassDB::register_runtime_class<PlaywrightTextboxResponse>();
+	//ClassDB::register_runtime_class<RichTextEffectReveal>();
 }
 
 void terminate_playwright_extension(ModuleInitializationLevel p_level) {
