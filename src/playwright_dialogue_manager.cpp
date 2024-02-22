@@ -56,3 +56,47 @@ void PlaywrightDialogueManager::_ready() {
 		textbox_response_inst = Object::cast_to<PlaywrightTextboxResponse>(textbox_response_scene->instantiate());
 	}
 }
+
+void PlaywrightDialogueManager::_unhandled_input(const Ref<InputEvent> &event) {
+
+}
+
+void PlaywrightDialogueManager::initiate_dialogue(Ref<PlaywrightDialogue> &dlg, int dlg_index) {
+
+}
+
+void PlaywrightDialogueManager::end_dialogue() {
+
+}
+
+void PlaywrightDialogueManager::continue_dialogue(Ref<PlaywrightDialogue> &dlg, int dlg_index, TypedArray<int> ending_branch_positions) {
+
+}
+
+int PlaywrightDialogueManager::recalculate_branch_pos(int dlg_index, TypedArray<int> ending_branch_positions) {
+	return 0;
+}
+
+void PlaywrightDialogueManager::show_textbox(PlaywrightDialogue::DIALOGUE_TYPE dlg_type) {
+
+}
+
+void PlaywrightDialogueManager::advance_dlg_and_reload_textbox(int dlg_index) {
+
+}
+
+int PlaywrightDialogueManager::realign_npc_dlg_index(int dlg_index) {
+	return 0;
+}
+
+int PlaywrightDialogueManager::realign_player_dlg_index(int dlg_index) {
+	return 0;
+}
+
+int PlaywrightDialogueManager::return_dlg_index_in_1d_array_format(int dlg_index) {
+	return 0;
+}
+
+void PlaywrightDialogueManager::destroy_textboxes() {
+
+}

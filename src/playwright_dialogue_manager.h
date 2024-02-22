@@ -42,6 +42,16 @@ namespace godot {
 			bool is_player_dialogue_active;
 			bool can_advance_line;
 
+			void end_dialogue();
+			void continue_dialogue(Ref<PlaywrightDialogue> &dlg, int dlg_index = 0, TypedArray<int> ending_branch_positions = {});
+			int recalculate_branch_pos(int dlg_index, TypedArray<int> ending_branch_positions);
+			void show_textbox(PlaywrightDialogue::DIALOGUE_TYPE dlg_type);
+			void advance_dlg_and_reload_textbox(int dlg_index = 0);
+			int realign_npc_dlg_index(int dlg_index);
+			int realign_player_dlg_index(int dlg_index);
+			int return_dlg_index_in_1d_array_format(int dlg_index);
+			void destroy_textboxes();
+
 		protected:
 			static void _bind_methods();
 
@@ -50,6 +60,8 @@ namespace godot {
 			~PlaywrightDialogueManager();
 				
 			void _ready() override;
+			void _unhandled_input(const Ref<InputEvent> &event) override;
+			void initiate_dialogue(Ref<PlaywrightDialogue> &dlg, int dlg_index = 0);
 	};
 
 }
