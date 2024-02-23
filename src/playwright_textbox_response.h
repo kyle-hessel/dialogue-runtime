@@ -43,6 +43,9 @@ namespace godot {
 
             void _ready() override;
             void _unhandled_input(const Ref<InputEvent> &event) override;
+
+            void set_player_selection(int _selection);
+            int get_player_selection() const;
     };
 }
 

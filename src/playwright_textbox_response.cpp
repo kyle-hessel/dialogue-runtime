@@ -104,3 +104,11 @@ void PlaywrightTextboxResponse::color_text_field_at_pos(int pos) {
         dlg_label->parse_bbcode(dlg_with_bbcode);
     }
 }
+
+void PlaywrightTextboxResponse::set_player_selection(int _selection) {
+    player_selection = _selection;
+}
+
+int PlaywrightTextboxResponse::get_player_selection() const {
+    return player_selection;
+}

@@ -58,7 +58,23 @@ void PlaywrightDialogueManager::_ready() {
 }
 
 void PlaywrightDialogueManager::_unhandled_input(const Ref<InputEvent> &event) {
-
+	// if the right key is pressed, determine how to proceed through dialogue.
+	if (event->is_action_pressed("gui_select")) {
+		// if there's a player dialogue, pass in the player choice (branch) and reload to continue on.
+		if (is_player_dialogue_active) {
+			advance_dlg_and_reload_textbox(textbox_response_inst->get_player_selection());
+		}
+		// if there's an NPC dialogue, decide to reload with the correct branch OR display the rest of the line first.
+		else if (is_npc_dialogue_active) {
+			if (can_advance_line) {
+				advance_dlg_and_reload_textbox(branch_index);
+			}
+			// if the key is pressed early before the line can be advanced, display the rest of the line all at once.
+			else {
+				textbox_inst->display_line();
+			}
+		}
+	}
 }
 
 void PlaywrightDialogueManager::initiate_dialogue(Ref<PlaywrightDialogue> &dlg, int dlg_index) {

@@ -32,7 +32,6 @@ namespace godot {
 
 			void begin_display_dialogue(String text_to_display);
 			void increment_letter();
-			void display_line();
 
 		protected:
 			static void _bind_methods();
@@ -47,6 +46,8 @@ namespace godot {
 		public:
 			PlaywrightTextbox();
 			~PlaywrightTextbox();
+
+			void display_line();
 			
 			int reveal_pos;
 			bool advance_letter;
