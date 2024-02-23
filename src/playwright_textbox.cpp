@@ -56,7 +56,7 @@ PlaywrightTextbox::PlaywrightTextbox() {
 }
 
 PlaywrightTextbox::~PlaywrightTextbox() {
-
+	memdelete(letter_display_timer);
 }
 
 void PlaywrightTextbox::_ready() {
