@@ -111,10 +111,10 @@ void PlaywrightTextbox::_ready() {
 }
 
 // pass in dialogue, start the display timer, and add the [reveal] tag to the displayed text.
-void PlaywrightTextbox::begin_display_dialogue(String text_to_display) {
+void PlaywrightTextbox::begin_display_dialogue(const String &text_to_display) {
 	dialogue = text_to_display;
 	letter_display_timer->start(letter_time);
-	String dlg_with_bbcode = "[reveal]" + dialogue + "[/reveal]";
+	const String dlg_with_bbcode = "[reveal]" + dialogue + "[/reveal]";
 	dialogue_label->parse_bbcode(dlg_with_bbcode);
 }
 

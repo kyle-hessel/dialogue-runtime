@@ -52,7 +52,7 @@ TypedArray<Array> PlaywrightDialogue::get_dialogue_options() const {
     return dialogue_options;
 }
 
-void PlaywrightDialogue::set_speaker(String _spkr) {
+void PlaywrightDialogue::set_speaker(const String &_spkr) {
     speaker = _spkr;
 }
 

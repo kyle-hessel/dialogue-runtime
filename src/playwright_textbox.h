@@ -30,7 +30,7 @@ namespace godot {
 			float space_time;
 			float punctuation_time;
 
-			void begin_display_dialogue(String text_to_display);
+			void begin_display_dialogue(const String &text_to_display);
 			void increment_letter();
 
 		protected:

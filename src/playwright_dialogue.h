@@ -30,7 +30,7 @@ namespace godot {
             DIALOGUE_TYPE get_dialogue_type() const;
             void set_dialogue_options(TypedArray<Array> _dlg_options);
             TypedArray<Array> get_dialogue_options() const;
-            void set_speaker(String _spkr);
+            void set_speaker(const String &_spkr);
             String get_speaker() const;
             void set_next_dialogue(Ref<PlaywrightDialogue> _next_dlg);
             Ref<PlaywrightDialogue> get_next_dialogue() const;
