@@ -8,8 +8,10 @@
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>
 #include <godot_cpp/classes/packed_scene.hpp>
+#include <godot_cpp/classes/node3d.hpp>
 
 #include <godot_cpp/variant/utility_functions.hpp>
+#include <godot_cpp/variant/node_path.hpp>
 
 using namespace godot;
 
@@ -83,11 +85,49 @@ void PlaywrightDialogueManager::initiate_dialogue(Ref<PlaywrightDialogue> &dlg, 
 }
 
 void PlaywrightDialogueManager::end_dialogue() {
+	// the five below lines may be redundant.
+	is_npc_dialogue_active = false;
+	is_player_dialogue_active = false;
+	can_advance_line = false;
+	line_index = 0;
+	branch_index = 0;
 
+	// once dialogue is completely finished, clear participants dictionary.
+	participants.clear();
+	emit_signal("dialogue_complete");
 }
 
+// starts a new dialogue if one isn't active by displaying a textbox with the given dialogue lines.
 void PlaywrightDialogueManager::continue_dialogue(Ref<PlaywrightDialogue> &dlg, int dlg_index, TypedArray<int> ending_branch_positions) {
+	//if branches ended, use the ending_branch_positions array to determine how to offset dialogue_index.
+	if (!ending_branch_positions.is_empty()) {
+		dlg_index = recalculate_branch_pos(dlg_index, ending_branch_positions);
+	}
 
+	bool in_cutscene = get_node<Node3D>(NodePath("/root/GameManager/EventsManager"))->get("in_cutscene");
+	if (in_cutscene == false) {
+		participants[dialogue_initiator].set("dialogue_branch_pos", dlg_index);
+	}
+
+	current_dialogue = dlg;
+
+	if (dlg->get_dialogue_type() != PlaywrightDialogue::DIALOGUE_TYPE::RESPONSE) {
+		// overwrite pre-existing dialogue_lines with new lines that were passed to the dialogue manager.
+		TypedArray<String> npc_dlg_selection = dlg->get_dialogue_options()[dlg_index];
+		npc_dialogue_lines = npc_dlg_selection;
+		// mark dialogue as active once a textbox is shown so another can't be instantiated over the existing one.
+		is_npc_dialogue_active = true;
+	}
+	else {
+		TypedArray<String> player_dlg_option = dlg->get_dialogue_options()[dlg_index];
+		player_response_lines = player_dlg_option;
+		is_player_dialogue_active = true;
+	}
+
+	// cache the branch_index for reload_textbox in_unhandled_input.
+	branch_index = dlg_index;
+
+	show_textbox(dlg->get_dialogue_type());
 }
 
 int PlaywrightDialogueManager::recalculate_branch_pos(int dlg_index, TypedArray<int> ending_branch_positions) {
