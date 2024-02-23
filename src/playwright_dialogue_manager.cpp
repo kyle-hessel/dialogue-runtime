@@ -78,7 +78,8 @@ void PlaywrightDialogueManager::_unhandled_input(const Ref<InputEvent> &event) {
 }
 
 void PlaywrightDialogueManager::initiate_dialogue(Ref<PlaywrightDialogue> &dlg, int dlg_index) {
-
+	dialogue_initiator = dlg->get_speaker();
+	continue_dialogue(dlg, dlg_index);
 }
 
 void PlaywrightDialogueManager::end_dialogue() {
