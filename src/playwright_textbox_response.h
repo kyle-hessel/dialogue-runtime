@@ -28,7 +28,6 @@ namespace godot {
 
             int player_selection;
 
-            void begin_display_response(TypedArray<String> text_to_display);
             void select_response(const Ref<InputEvent> &event);
             void color_text_field_at_pos(int pos);
         
@@ -39,7 +38,7 @@ namespace godot {
             PlaywrightTextboxResponse();
             ~PlaywrightTextboxResponse();
 
-
+            void begin_display_response(TypedArray<String> text_to_display);
 
             void _ready() override;
             void _unhandled_input(const Ref<InputEvent> &event) override;

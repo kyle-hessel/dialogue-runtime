@@ -12,12 +12,13 @@
 
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/variant/node_path.hpp>
+#include <godot_cpp/variant/signal.hpp>
 
 using namespace godot;
 
 void PlaywrightDialogueManager::_bind_methods() {
 	
-
+	ClassDB::bind_method(D_METHOD("set_can_advance_line_true"), &PlaywrightDialogueManager::set_can_advance_line_true);
 
 	ADD_SIGNAL(MethodInfo("dialogue_complete"));
 	ADD_SIGNAL(MethodInfo("dialogue_trigger"));
@@ -130,12 +131,47 @@ void PlaywrightDialogueManager::continue_dialogue(Ref<PlaywrightDialogue> &dlg, 
 	show_textbox(dlg->get_dialogue_type());
 }
 
+// determine how much to offset the dialogue index by, based on how many branches collapsed.
 int PlaywrightDialogueManager::recalculate_branch_pos(int dlg_index, TypedArray<int> ending_branch_positions) {
-	return 0;
+	int original_dlg_index = dlg_index;
+
+	for (int pos = 0; pos < ending_branch_positions.size(); pos++) {
+		if (original_dlg_index > pos) {
+			dlg_index--;
+		}
+	}
+
+	return dlg_index;
 }
 
+// determine if an NPC dialogue box or a player dialogue box is going to be shown.
 void PlaywrightDialogueManager::show_textbox(PlaywrightDialogue::DIALOGUE_TYPE dlg_type) {
+	// if NPC dialogue: instantiate the textbox, hook up a signal for advancing dlg lines, and begin dlg printing to the textbox.
+	if (dlg_type != PlaywrightDialogue::DIALOGUE_TYPE::RESPONSE) {
+		textbox_inst = Object::cast_to<PlaywrightTextbox>(textbox_scene->instantiate());
+		// mark can_advance_line as true again once the textbox deems the current string as finished displaying, using a signal.
+		textbox_inst->connect("finished_displaying", Callable(this, "set_can_advance_line_true"));
+		add_child(textbox_inst);
+		// for consistent naming behind the scenes, probably not necessary but could be useful.
+		String inst_name = "TextboxInst" + UtilityFunctions::var_to_str(line_index);
+		textbox_inst->set("name", inst_name);
+		// using the current line index (incremented using player input), decide which dlg line to print from what was passed into the manager.
+		textbox_inst->begin_display_dialogue(npc_dialogue_lines[line_index]);
+		// mark can_advance_line to false for now so that the line can't be skipped prematurely.
+		can_advance_line = false;
+	}
+	// if player response: do the same as above but skip some steps regarding line-by-line display, and pass in the whole array of strings at once.
+	else {
+		textbox_response_inst = Object::cast_to<PlaywrightTextboxResponse>(textbox_response_scene->instantiate());
+		add_child(textbox_response_inst);
+		String inst_name = "TextboxResponseInst" + UtilityFunctions::var_to_str(line_index);
+		textbox_response_inst->set("name", inst_name);
+		textbox_response_inst->begin_display_response(player_response_lines);
+	}
+}
 
+void PlaywrightDialogueManager::set_can_advance_line_true() {
+	can_advance_line = true;
 }
 
 void PlaywrightDialogueManager::advance_dlg_and_reload_textbox(int dlg_index) {

@@ -62,6 +62,7 @@ namespace godot {
 			void _ready() override;
 			void _unhandled_input(const Ref<InputEvent> &event) override;
 			void initiate_dialogue(Ref<PlaywrightDialogue> &dlg, int dlg_index = 0);
+			void set_can_advance_line_true();
 	};
 
 }

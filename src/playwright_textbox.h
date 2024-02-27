@@ -30,7 +30,6 @@ namespace godot {
 			float space_time;
 			float punctuation_time;
 
-			void begin_display_dialogue(const String &text_to_display);
 			void increment_letter();
 
 		protected:
@@ -47,6 +46,7 @@ namespace godot {
 			PlaywrightTextbox();
 			~PlaywrightTextbox();
 
+			void begin_display_dialogue(const String &text_to_display);
 			void display_line();
 			
 			int reveal_pos;
