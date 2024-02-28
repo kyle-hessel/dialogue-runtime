@@ -43,7 +43,7 @@ namespace godot {
 			bool can_advance_line;
 
 			void end_dialogue();
-			void continue_dialogue(Ref<PlaywrightDialogue> &dlg, int dlg_index = 0, TypedArray<int> ending_branch_positions = {});
+			void continue_dialogue(Ref<PlaywrightDialogue> dlg, int dlg_index = 0, TypedArray<int> ending_branch_positions = {});
 			int recalculate_branch_pos(int dlg_index, TypedArray<int> ending_branch_positions);
 			void show_textbox(PlaywrightDialogue::DIALOGUE_TYPE dlg_type);
 			void advance_dlg_and_reload_textbox(int dlg_index = 0);

@@ -99,7 +99,7 @@ void PlaywrightDialogueManager::end_dialogue() {
 }
 
 // starts a new dialogue if one isn't active by displaying a textbox with the given dialogue lines.
-void PlaywrightDialogueManager::continue_dialogue(Ref<PlaywrightDialogue> &dlg, int dlg_index, TypedArray<int> ending_branch_positions) {
+void PlaywrightDialogueManager::continue_dialogue(Ref<PlaywrightDialogue> dlg, int dlg_index, TypedArray<int> ending_branch_positions) {
 	//if branches ended, use the ending_branch_positions array to determine how to offset dialogue_index.
 	if (!ending_branch_positions.is_empty()) {
 		dlg_index = recalculate_branch_pos(dlg_index, ending_branch_positions);
@@ -174,8 +174,147 @@ void PlaywrightDialogueManager::set_can_advance_line_true() {
 	can_advance_line = true;
 }
 
+// deletes the current textbox, increments which dlg string should be fed into the next textbox, and draws the next line with a new textbox if there is one.
 void PlaywrightDialogueManager::advance_dlg_and_reload_textbox(int dlg_index) {
+	// if there isn't a next dlg queued up, destroy existing textboxes as normal.
+	if (current_dialogue->get_next_dialogue() == nullptr) {
+		// if the player has an active dlg, destroy that when this function is called before destroying NPC dlg.
+		if (is_player_dialogue_active) {
+			textbox_response_inst->queue_free();
+			is_player_dialogue_active = false;
+		}
 
+		textbox_inst->queue_free(); // could add a function here instead that plays an animation before queue_free.
+		line_index++;
+
+		// if there is no more dlg, reset to defaults.
+		if (line_index >= npc_dialogue_lines.size()) {
+			end_dialogue();
+			return;
+		}
+		// otherwise, keep printing dlg.
+		else {
+			show_textbox(current_dialogue->get_dialogue_type());
+		}
+	}
+	// if there is a dlg queued up, collapse any branches and determine what to do to transition to that dlg, depending on its type.
+	else {
+		// for branches that resolve earlier than the length of the entire dlg.
+		if (is_npc_dialogue_active) {
+			TypedArray<String> dlg_option = current_dialogue->get_dialogue_options()[dlg_index];
+			String dlg_string = dlg_option[0];
+			if (dlg_string.contains("[end]") == true) {
+				branch_ended = true;
+			}
+		}
+		else if (is_player_dialogue_active) {
+			TypedArray<String> dlg_option = current_dialogue->get_dialogue_options()[dlg_index];
+			String dlg_string = dlg_option[dlg_index];
+			if (dlg_string.contains("[end]") == true) {
+				branch_ended = true;
+			}
+		}
+
+		// if we are on a branch that ended early, then early out!
+		if (branch_ended) {
+			textbox_inst->queue_free(); // could add a function here instead that plays an animation before queue_free.
+			if (is_player_dialogue_active) {
+				textbox_response_inst->queue_free();
+			}
+			end_dialogue();
+			return;
+		}
+		else {
+			// determine which inactive branches ended on this dlg to offset dlg_index later, once continue_dialogue is called.
+			TypedArray<int> ending_branches;
+
+			if (is_npc_dialogue_active) {
+				TypedArray<Array> dlg_options = current_dialogue->get_dialogue_options();
+				for (int options_pos = 0; options_pos < dlg_options.size(); options_pos++) {
+					TypedArray<String> dlg_option = dlg_options[options_pos];
+					String dlg_string = dlg_option[0];
+					if (dlg_string.contains("[end]") == true) {
+						ending_branches.append(options_pos);
+					}
+				}
+			}
+			else if (is_player_dialogue_active) {
+				int pos_tally = 0;
+				TypedArray<Array> dlg_options = current_dialogue->get_dialogue_options();
+				for (int options_pos = 0; options_pos < dlg_options.size(); options_pos++) {
+					TypedArray<String> dlg_option = dlg_options[options_pos];
+					for (int lines_pos = 0; lines_pos < dlg_option.size(); lines_pos++) {
+						String dlg_string = dlg_option[lines_pos];
+						if (dlg_string.contains("[end]") == true) {
+							ending_branches.append(pos_tally);
+						}
+						pos_tally++;
+					}
+				}
+			}
+
+			// lastly, transition to the next dlg.
+			PlaywrightDialogue::DIALOGUE_TYPE next_dlg_type = current_dialogue->get_next_dialogue()->get_dialogue_type();
+			bool in_cutscene = get_node<Node3D>(NodePath("/root/GameManager/EventsManager"))->get("in_cutscene");
+			switch(next_dlg_type) {
+				case PlaywrightDialogue::DIALOGUE_TYPE::DEFAULT:
+					// if the next dlg is an NPC default dlg and the current dlg is a player response, do the following:
+					if (is_player_dialogue_active) {
+						// delete the player textbox and mark the player dlg as inactive.
+						textbox_response_inst->queue_free();
+						is_player_dialogue_active = false;
+
+						// realign dlg_index to align 1D array of NPC dlgs with 1D array of potential player responses.
+						dlg_index = realign_npc_dlg_index(dlg_index);
+					}
+
+					textbox_inst->queue_free();
+					line_index = 0;
+
+					if (in_cutscene == false) {
+						// if not in a cutscene, make the new NPC dlg the checkpoint dlg for the initiator of the conversation.
+						participants[dialogue_initiator].set("checkpoint_dialogue", current_dialogue->get_next_dialogue());
+					}
+
+					continue_dialogue(current_dialogue->get_next_dialogue(), dlg_index, ending_branches);
+
+					break;
+				case PlaywrightDialogue::DIALOGUE_TYPE::RESPONSE:
+
+					line_index++;
+
+					// once the NPC dlg lines run out, just start the new dlg chain.
+					if (line_index >= npc_dialogue_lines.size()) {
+						is_npc_dialogue_active = false;
+						can_advance_line = false;
+						// don't reset line_index here, as we need that data if textbox_inst remains during a player response in order to properly destroy textbox_inst after the fact.
+						// don't mark an NPC dlg checkpoint during a player response, as they aren't speaking (going to try to ensure this isn't needed going forward).
+
+						// realign dlg_index depending on what the upcoming player dlgs contain.
+						dlg_index = realign_player_dlg_index(dlg_index);
+
+						continue_dialogue(current_dialogue->get_next_dialogue(), dlg_index, ending_branches);
+					
+					}
+					// otherwise, continue dlg chain.
+					else {
+						textbox_inst->queue_free();
+						show_textbox(current_dialogue->get_dialogue_type());
+					}
+
+					break;
+				case PlaywrightDialogue::DIALOGUE_TYPE::CALL:
+
+					break;
+				case PlaywrightDialogue::DIALOGUE_TYPE::MESSAGE:
+
+					break;
+				case PlaywrightDialogue::DIALOGUE_TYPE::SHOUT:
+
+					break;
+			}
+		}
+	}
 }
 
 int PlaywrightDialogueManager::realign_npc_dlg_index(int dlg_index) {
