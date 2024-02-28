@@ -317,18 +317,62 @@ void PlaywrightDialogueManager::advance_dlg_and_reload_textbox(int dlg_index) {
 	}
 }
 
+// all functions below are dlg and textbox helper functions.
+
 int PlaywrightDialogueManager::realign_npc_dlg_index(int dlg_index) {
-	return 0;
+	// if the incoming NPC dlg only has one option, just set dlg_index to 0 as the branching tree is now collapsing back down.
+	if (current_dialogue->get_next_dialogue()->get_dialogue_options().size() == 1) {
+		dlg_index = 0;
+	}
+	/* if the incoming NPC dlg has multiple options, determine how to format dlg_index 
+	before passing it onto the next NPC dlg if the player had more than one response list from the prior branches. */
+	else {
+		if (current_dialogue->get_dialogue_options().size() > 1) {
+			// map position of player's response in a 2D array back to a 1D array and assign it to dlg_index so that the NPC chooses the correct line of dialogue.
+			dlg_index = return_dlg_index_in_1d_array_format(dlg_index);
+		}
+	}
+
+	return dlg_index;
 }
 
 int PlaywrightDialogueManager::realign_player_dlg_index(int dlg_index) {
-	return 0;
+	// if the incoming player dlg only has one option, just set dlg_index to 0 as the branching tree is now collapsing back down.
+	if (current_dialogue->get_next_dialogue()->get_dialogue_options().size() == 1) {
+		dlg_index = 0;
+	}
+
+	return dlg_index;
 }
 
+// break down 2D array of potential player responses from PlaywrightDialogue's dialogue_options into a flat 1D array, and convert the dlg_index accordingly.
 int PlaywrightDialogueManager::return_dlg_index_in_1d_array_format(int dlg_index) {
-	return 0;
+	int temp_pos = 0;
+	
+	for (int pos = 0; pos < branch_index; pos++) {
+		TypedArray<Array> dlg_options = current_dialogue->get_dialogue_options();
+		Array dlg_option = dlg_options[pos];
+		temp_pos += dlg_option.size();
+	}
+
+	return temp_pos + dlg_index;
 }
 
 void PlaywrightDialogueManager::destroy_textboxes() {
-
+	if (is_player_dialogue_active) {
+		textbox_response_inst->queue_free();
+		is_player_dialogue_active = false;
+		textbox_inst->queue_free();
+		is_npc_dialogue_active = false;
+		can_advance_line = false;
+		line_index = 0;
+		branch_index = 0;
+	}
+	else {
+		textbox_inst->queue_free();
+		is_npc_dialogue_active = false;
+		can_advance_line = false;
+		line_index = 0;
+		branch_index = 0;
+	}
 }
