@@ -19,6 +19,12 @@ using namespace godot;
 void PlaywrightDialogueManager::_bind_methods() {
 	
 	ClassDB::bind_method(D_METHOD("set_can_advance_line_true"), &PlaywrightDialogueManager::set_can_advance_line_true);
+	ClassDB::bind_method(D_METHOD("set_is_player_dialogue_active", "_player_dlg_active"), &PlaywrightDialogueManager::set_is_player_dialogue_active);
+  	ClassDB::bind_method(D_METHOD("get_is_player_dialogue_active"), &PlaywrightDialogueManager::get_is_player_dialogue_active);
+  	ClassDB::add_property("PlaywrightDialogueManager", PropertyInfo(Variant::BOOL, "is_player_dialogue_active"), "set_is_player_dialogue_active", "get_is_player_dialogue_active");
+	ClassDB::bind_method(D_METHOD("set_is_npc_dialogue_active", "_npc_dlg_active"), &PlaywrightDialogueManager::set_is_npc_dialogue_active);
+  	ClassDB::bind_method(D_METHOD("get_is_npc_dialogue_active"), &PlaywrightDialogueManager::get_is_npc_dialogue_active);
+  	ClassDB::add_property("PlaywrightDialogueManager", PropertyInfo(Variant::BOOL, "is_npc_dialogue_active"), "set_is_npc_dialogue_active", "get_is_npc_dialogue_active");
 
 	ADD_SIGNAL(MethodInfo("dialogue_complete"));
 	ADD_SIGNAL(MethodInfo("dialogue_trigger"));
@@ -375,4 +381,22 @@ void PlaywrightDialogueManager::destroy_textboxes() {
 		line_index = 0;
 		branch_index = 0;
 	}
+}
+
+// getters and setters for variables exposed in gdscript
+
+void PlaywrightDialogueManager::set_is_player_dialogue_active(bool _player_dlg_active) {
+	is_player_dialogue_active = _player_dlg_active;
+}
+
+bool PlaywrightDialogueManager::get_is_player_dialogue_active() const {
+	return is_player_dialogue_active;
+}
+
+void PlaywrightDialogueManager::set_is_npc_dialogue_active(bool _npc_dlg_active) {
+	is_npc_dialogue_active = _npc_dlg_active;
+}
+
+bool PlaywrightDialogueManager::get_is_npc_dialogue_active() const {
+	return is_npc_dialogue_active;
 }

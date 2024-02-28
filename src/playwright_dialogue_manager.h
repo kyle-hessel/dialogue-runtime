@@ -63,6 +63,11 @@ namespace godot {
 			void _unhandled_input(const Ref<InputEvent> &event) override;
 			void initiate_dialogue(Ref<PlaywrightDialogue> &dlg, int dlg_index = 0);
 			void set_can_advance_line_true();
+
+			void set_is_player_dialogue_active(bool _player_dlg_active);
+			bool get_is_player_dialogue_active() const;
+			void set_is_npc_dialogue_active(bool _npc_dlg_active);
+			bool get_is_npc_dialogue_active() const;
 	};
 
 }
