@@ -1,0 +1,9 @@
+These files should all be put in a folder called playwright_runtime
+in the project's addons folder. Create that if it does not already exist.
+Then, copy the binary for the extension and place it alongside the other
+files in the same folder. If building from source, the SConstruct file
+will have to be modified to point the completed binary at the right
+project. This is also preferable for hot-reloading during development,
+as each compile will replace the binary with the new version and the
+Godot editor will hot-reload. Lastly, remember to swap the debug binary
+with the release binary before exporting a final game.
