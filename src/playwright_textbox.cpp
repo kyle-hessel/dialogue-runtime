@@ -43,8 +43,9 @@ void PlaywrightTextbox::_bind_methods() {
 
 PlaywrightTextbox::PlaywrightTextbox() {
   	letter_display_timer = memnew(Timer);
+	
 
-  	letter_time = 0.03;
+  	letter_time = 0.05;
   	space_time = 0.06;
   	punctuation_time = 0.2;
   
@@ -64,6 +65,7 @@ void PlaywrightTextbox::_ready() {
 		set_process_mode(Node::ProcessMode::PROCESS_MODE_DISABLED);
 	}
 	else {
+		set_process_mode(Node::ProcessMode::PROCESS_MODE_INHERIT);
 		// Instantiate PackedScenes here.
 		if (textbox_margin_scene != nullptr) {
 			textbox_margin = Object::cast_to<MarginContainer>(textbox_margin_scene->instantiate());
@@ -100,10 +102,13 @@ void PlaywrightTextbox::_ready() {
 				// if the RichTextEffect in question is a RichTextEffectReveal, wire up some signals.
 				if (rte == text_reveal_effect) {
 					// Signals for incrementing the text reveal effect.
-					letter_display_timer->connect("timeout", Callable(this, "_on_letter_display_timeout"));
-					letter_display_timer->connect("timeout", Callable(this, "increment_letter"));
+					Error err1 = letter_display_timer->connect("timeout", Callable(this, "_on_letter_display_timeout"));
+					Error err2 = letter_display_timer->connect("timeout", Callable(this, "increment_letter"));
+					UtilityFunctions::print(letter_display_timer->get_signal_connection_list("timeout"));
 					// Signal for displaying the entire line at once, skipping the above effect.
-					connect("finished_displaying", Callable(this, "_on_signal_show_entire_line"));
+					Error err3 = connect("finished_displaying", Callable(this, "_on_signal_show_entire_line"));
+					
+					UtilityFunctions::print(err1, err2, err3);
 				}
 			}
 		}
@@ -115,7 +120,7 @@ void PlaywrightTextbox::begin_display_dialogue(const String &text_to_display) {
 	dialogue = text_to_display;
 	letter_display_timer->start(letter_time);
 	const String dlg_with_bbcode = "[reveal]" + dialogue + "[/reveal]";
-	dialogue_label->parse_bbcode(dlg_with_bbcode);
+	dialogue_label->set_text(dlg_with_bbcode);
 }
 
 // increments the letter by determining how long the timer should be and restarting it, which will modify the RichTextEffectReveal in turn.
@@ -153,6 +158,7 @@ void PlaywrightTextbox::display_line() {
 
 void PlaywrightTextbox::_on_letter_display_timeout() {
 	advance_letter = true;
+	UtilityFunctions::print("not firing.");
 }
 
 void PlaywrightTextbox::_on_signal_show_entire_line() {

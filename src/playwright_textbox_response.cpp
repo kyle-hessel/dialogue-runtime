@@ -30,6 +30,7 @@ void PlaywrightTextboxResponse::_ready() {
 		set_process_mode(Node::ProcessMode::PROCESS_MODE_DISABLED);
 	} 
     else {
+        set_process_mode(Node::ProcessMode::PROCESS_MODE_INHERIT);
         ResourceLoader* re_lo = ResourceLoader::get_singleton();
         dlg_end_effect = re_lo->load("res://addons/playwright_runtime/resources/dialogue_label_end.tres");
         text_color_effect = re_lo->load("res://addons/playwright_runtime/resources/dialogue_label_color.tres");

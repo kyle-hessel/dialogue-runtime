@@ -63,7 +63,9 @@ void PlaywrightDialogueManager::_ready() {
 		set_process_mode(Node::ProcessMode::PROCESS_MODE_DISABLED);
 	}
 	else {
+		set_process_mode(Node::ProcessMode::PROCESS_MODE_INHERIT);
 		UtilityFunctions::print("is this thing on?");
+
 
 		ResourceLoader* re_lo = ResourceLoader::get_singleton();
 
