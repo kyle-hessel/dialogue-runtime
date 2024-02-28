@@ -18,6 +18,8 @@ using namespace godot;
 
 void PlaywrightDialogueManager::_bind_methods() {
 	
+	ClassDB::bind_method(D_METHOD("initiate_dialogue", "dlg", "dlg_index"), &PlaywrightDialogueManager::initiate_dialogue);
+	ClassDB::bind_method(D_METHOD("dlg_early_out"), &PlaywrightDialogueManager::dlg_early_out);
 	ClassDB::bind_method(D_METHOD("set_can_advance_line_true"), &PlaywrightDialogueManager::set_can_advance_line_true);
 	ClassDB::bind_method(D_METHOD("set_is_player_dialogue_active", "_player_dlg_active"), &PlaywrightDialogueManager::set_is_player_dialogue_active);
   	ClassDB::bind_method(D_METHOD("get_is_player_dialogue_active"), &PlaywrightDialogueManager::get_is_player_dialogue_active);
@@ -25,6 +27,13 @@ void PlaywrightDialogueManager::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("set_is_npc_dialogue_active", "_npc_dlg_active"), &PlaywrightDialogueManager::set_is_npc_dialogue_active);
   	ClassDB::bind_method(D_METHOD("get_is_npc_dialogue_active"), &PlaywrightDialogueManager::get_is_npc_dialogue_active);
   	ClassDB::add_property("PlaywrightDialogueManager", PropertyInfo(Variant::BOOL, "is_npc_dialogue_active"), "set_is_npc_dialogue_active", "get_is_npc_dialogue_active");
+	ClassDB::bind_method(D_METHOD("set_branch_index", "_branch_idx"), &PlaywrightDialogueManager::set_branch_index);
+	ClassDB::bind_method(D_METHOD("get_branch_index"), &PlaywrightDialogueManager::get_branch_index);
+	ClassDB::add_property("PlaywrightDialogueManager", PropertyInfo(Variant::INT, "branch_index"), "set_branch_index", "get_branch_index");
+	ClassDB::bind_method(D_METHOD("set_participants", "_participants"), &PlaywrightDialogueManager::set_participants);
+	ClassDB::bind_method(D_METHOD("get_participants"), &PlaywrightDialogueManager::get_participants);
+	ClassDB::add_property("PlaywrightDialogueManager", PropertyInfo(Variant::DICTIONARY, "participants"), "set_participants", "get_participants");
+	
 
 	ADD_SIGNAL(MethodInfo("dialogue_complete"));
 	ADD_SIGNAL(MethodInfo("dialogue_trigger"));
@@ -86,7 +95,7 @@ void PlaywrightDialogueManager::_unhandled_input(const Ref<InputEvent> &event) {
 	}
 }
 
-void PlaywrightDialogueManager::initiate_dialogue(Ref<PlaywrightDialogue> &dlg, int dlg_index) {
+void PlaywrightDialogueManager::initiate_dialogue(Ref<PlaywrightDialogue> dlg, int dlg_index) {
 	dialogue_initiator = dlg->get_speaker();
 	continue_dialogue(dlg, dlg_index);
 }
@@ -383,6 +392,13 @@ void PlaywrightDialogueManager::destroy_textboxes() {
 	}
 }
 
+void PlaywrightDialogueManager::dlg_early_out() {
+	if (is_player_dialogue_active || is_npc_dialogue_active) {
+		line_index = 99; // overload to a value bigger than any array of dlg strings ever ought to be, to force-delete.
+		destroy_textboxes();
+	}
+}
+
 // getters and setters for variables exposed in gdscript
 
 void PlaywrightDialogueManager::set_is_player_dialogue_active(bool _player_dlg_active) {
@@ -399,4 +415,20 @@ void PlaywrightDialogueManager::set_is_npc_dialogue_active(bool _npc_dlg_active)
 
 bool PlaywrightDialogueManager::get_is_npc_dialogue_active() const {
 	return is_npc_dialogue_active;
+}
+
+void PlaywrightDialogueManager::set_branch_index(int _branch_idx) {
+	branch_index = _branch_idx;
+}
+
+int PlaywrightDialogueManager::get_branch_index() const {
+	return branch_index;
+}
+
+void PlaywrightDialogueManager::set_participants(Dictionary _participants) {
+	participants = _participants;
+}
+
+Dictionary PlaywrightDialogueManager::get_participants() const {
+	return participants;
 }
