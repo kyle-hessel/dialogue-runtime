@@ -79,6 +79,7 @@ namespace godot {
 			float get_punctuation_time() const;
 				  
 			void _ready() override;
+			void _exit_tree() override;
 	};
 }
 #endif

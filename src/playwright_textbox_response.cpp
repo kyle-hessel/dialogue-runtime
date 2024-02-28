@@ -67,8 +67,7 @@ void PlaywrightTextboxResponse::begin_display_response(TypedArray<String> text_t
 
     // ensure each RichTextLabel contains the proper effects and populate text for each of them w/ effects included.
     for (int d = 0; d < dialogue_labels.size(); d++) {
-        RichTextLabel* dlg_label = Object::cast_to<RichTextLabel>(dialogue_labels[d]); // FIXME: crashes - is null.
-        UtilityFunctions::print(dlg_label);
+        RichTextLabel* dlg_label = Object::cast_to<RichTextLabel>(dialogue_labels[d]);
         dlg_label->install_effect(text_color_effect);
         dlg_label->install_effect(dlg_end_effect);
         color_text_field_at_pos(d);

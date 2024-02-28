@@ -57,6 +57,10 @@ PlaywrightTextbox::PlaywrightTextbox() {
 }
 
 PlaywrightTextbox::~PlaywrightTextbox() {
+	
+}
+
+void PlaywrightTextbox::_exit_tree() {
 	memdelete(letter_display_timer);
 }
 
