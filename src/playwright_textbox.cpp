@@ -102,13 +102,10 @@ void PlaywrightTextbox::_ready() {
 				// if the RichTextEffect in question is a RichTextEffectReveal, wire up some signals.
 				if (rte == text_reveal_effect) {
 					// Signals for incrementing the text reveal effect.
-					Error err1 = letter_display_timer->connect("timeout", Callable(this, "_on_letter_display_timeout"));
-					Error err2 = letter_display_timer->connect("timeout", Callable(this, "increment_letter"));
-					UtilityFunctions::print(letter_display_timer->get_signal_connection_list("timeout"));
+					letter_display_timer->connect("timeout", Callable(this, "_on_letter_display_timeout"));
+					letter_display_timer->connect("timeout", Callable(this, "increment_letter"));
 					// Signal for displaying the entire line at once, skipping the above effect.
-					Error err3 = connect("finished_displaying", Callable(this, "_on_signal_show_entire_line"));
-					
-					UtilityFunctions::print(err1, err2, err3);
+					connect("finished_displaying", Callable(this, "_on_signal_show_entire_line"));
 				}
 			}
 		}
@@ -158,7 +155,6 @@ void PlaywrightTextbox::display_line() {
 
 void PlaywrightTextbox::_on_letter_display_timeout() {
 	advance_letter = true;
-	UtilityFunctions::print("not firing.");
 }
 
 void PlaywrightTextbox::_on_signal_show_entire_line() {

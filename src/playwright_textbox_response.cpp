@@ -7,6 +7,7 @@
 #include <godot_cpp/classes/rich_text_label.hpp>
 #include <godot_cpp/classes/v_box_container.hpp>
 
+#include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/variant/array.hpp>
 #include <godot_cpp/variant/string.hpp>
 
@@ -40,8 +41,9 @@ void PlaywrightTextboxResponse::_ready() {
     
         textbox_margin = Object::cast_to<MarginContainer>(textbox_margin_scene->instantiate());
         textbox_vbox = Object::cast_to<VBoxContainer>(textbox_margin->get_child(0)->get_child(0));
+        dialogue_label = Object::cast_to<RichTextLabel>(textbox_vbox->get_child(0));
 
-        dialogue_labels.append(dialogue_label);
+        dialogue_labels.append(dialogue_label); // dialogue_label is inherited from PlaywrightTextbox.
     }
 }
 
@@ -65,7 +67,8 @@ void PlaywrightTextboxResponse::begin_display_response(TypedArray<String> text_t
 
     // ensure each RichTextLabel contains the proper effects and populate text for each of them w/ effects included.
     for (int d = 0; d < dialogue_labels.size(); d++) {
-        RichTextLabel* dlg_label = Object::cast_to<RichTextLabel>(dialogue_labels[d]);
+        RichTextLabel* dlg_label = Object::cast_to<RichTextLabel>(dialogue_labels[d]); // FIXME: crashes - is null.
+        UtilityFunctions::print(dlg_label);
         dlg_label->install_effect(text_color_effect);
         dlg_label->install_effect(dlg_end_effect);
         color_text_field_at_pos(d);

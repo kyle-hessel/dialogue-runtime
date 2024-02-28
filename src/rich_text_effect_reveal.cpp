@@ -32,7 +32,6 @@ bool RichTextEffectReveal::_process_custom_fx(const Ref<CharFXTransform> &char_f
 		}
 		
 		if (owning_textbox->advance_letter) {
-			UtilityFunctions::print("hello??");
 			owning_textbox->reveal_pos++;
 			owning_textbox->advance_letter = false;
 		}
