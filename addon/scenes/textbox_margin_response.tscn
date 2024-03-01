@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://dai368fbxbroe"]
+
+[ext_resource type="Theme" uid="uid://br181ppxwwvsi" path="res://assets/UI/dialogue/dialogue_response_theme.tres" id="1_405ow"]
+[ext_resource type="PackedScene" uid="uid://b71vm5sbs8ief" path="res://scenes/UI/dialogue/dialogue_label.tscn" id="2_xlmru"]
+
+[node name="TextboxMargin" type="MarginContainer"]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 68.0
+offset_top = 53.0
+offset_right = 852.0
+offset_bottom = 272.0
+grow_vertical = 2
+theme = ExtResource("1_405ow")
+
+[node name="TextboxPanel" type="PanelContainer" parent="."]
+layout_mode = 2
+
+[node name="TextboxVbox" type="VBoxContainer" parent="TextboxPanel"]
+layout_mode = 2
+
+[node name="DialogueLabel" parent="TextboxPanel/TextboxVbox" instance=ExtResource("2_xlmru")]
+layout_mode = 2
+focus_mode = 2
+selection_enabled = true
