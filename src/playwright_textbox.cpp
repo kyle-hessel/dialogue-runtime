@@ -130,9 +130,6 @@ void PlaywrightTextbox::increment_letter() {
 
 	// once the letter index is equal or greater than the length of the dialogue, finish displaying.
 	String dlg_no_markup = dialogue_label->get_parsed_text();
-	UtilityFunctions::print(letter_index);
-	UtilityFunctions::print(dlg_no_markup.length());
-	UtilityFunctions::print("---------------");
 	if (letter_index >= dlg_no_markup.length() - 1) {
 		display_line();
 		return;
@@ -142,7 +139,6 @@ void PlaywrightTextbox::increment_letter() {
 	char letter = dlg_no_markup[letter_index + 1];
 	if (letter == '!' || letter == '.' || letter == ',' || letter == '?') {
 		letter_display_timer->start(punctuation_time * 2.0);
-		UtilityFunctions::print("wth");
 	} 
 	else if (letter == ' ') {
 		letter_display_timer->start(space_time);
