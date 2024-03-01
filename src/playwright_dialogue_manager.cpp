@@ -72,8 +72,8 @@ void PlaywrightDialogueManager::_ready() {
 		textbox_scene = re_lo->load("res://addons/playwright_runtime/scenes/playwright_textbox.tscn");
 		textbox_response_scene = re_lo->load("res://addons/playwright_runtime/scenes/playwright_textbox_response.tscn");
 
-		textbox_inst = Object::cast_to<PlaywrightTextbox>(textbox_scene->instantiate());
-		textbox_response_inst = Object::cast_to<PlaywrightTextboxResponse>(textbox_response_scene->instantiate());
+		//textbox_inst = Object::cast_to<PlaywrightTextbox>(textbox_scene->instantiate());
+		//textbox_response_inst = Object::cast_to<PlaywrightTextboxResponse>(textbox_response_scene->instantiate());
 	}
 }
 
@@ -131,14 +131,22 @@ void PlaywrightDialogueManager::continue_dialogue(Ref<PlaywrightDialogue> dlg, i
 
 	if (dlg->get_dialogue_type() != PlaywrightDialogue::DIALOGUE_TYPE::RESPONSE) {
 		// overwrite pre-existing dialogue_lines with new lines that were passed to the dialogue manager.
-		TypedArray<String> npc_dlg_selection = dlg->get_dialogue_options()[dlg_index];
+		TypedArray<Array> dlg_options = dlg->get_dialogue_options();
+		UtilityFunctions::print(dlg_options);
+		TypedArray<String> npc_dlg_selection = dlg_options[dlg_index];
 		npc_dialogue_lines = npc_dlg_selection;
+		UtilityFunctions::print("copied for NPC:");
+		UtilityFunctions::print(npc_dialogue_lines);
 		// mark dialogue as active once a textbox is shown so another can't be instantiated over the existing one.
 		is_npc_dialogue_active = true;
 	}
 	else {
-		TypedArray<String> player_dlg_option = dlg->get_dialogue_options()[dlg_index];
+		TypedArray<Array> dlg_options = dlg->get_dialogue_options();
+		UtilityFunctions::print(dlg_options);
+		TypedArray<String> player_dlg_option = dlg_options[dlg_index];
 		player_response_lines = player_dlg_option;
+		UtilityFunctions::print("copied for player:");
+		UtilityFunctions::print(player_response_lines);
 		is_player_dialogue_active = true;
 	}
 
@@ -225,7 +233,7 @@ void PlaywrightDialogueManager::advance_dlg_and_reload_textbox(int dlg_index) {
 			}
 		}
 		else if (is_player_dialogue_active) {
-			TypedArray<String> dlg_option = current_dialogue->get_dialogue_options()[dlg_index];
+			TypedArray<String> dlg_option = current_dialogue->get_dialogue_options()[branch_index];
 			String dlg_string = dlg_option[dlg_index];
 			if (dlg_string.contains("[end]") == true) {
 				branch_ended = true;
