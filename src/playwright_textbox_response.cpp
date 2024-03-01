@@ -42,6 +42,7 @@ void PlaywrightTextboxResponse::_ready() {
         textbox_margin = Object::cast_to<MarginContainer>(textbox_margin_scene->instantiate());
         textbox_vbox = Object::cast_to<VBoxContainer>(textbox_margin->get_child(0)->get_child(0));
         dialogue_label = Object::cast_to<RichTextLabel>(textbox_vbox->get_child(0));
+        add_child(textbox_margin);
 
         dialogue_labels.append(dialogue_label); // dialogue_label is inherited from PlaywrightTextbox.
     }

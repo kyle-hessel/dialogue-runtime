@@ -121,7 +121,7 @@ void PlaywrightTextbox::begin_display_dialogue(const String &text_to_display) {
 	dialogue = text_to_display;
 	letter_display_timer->start(letter_time);
 	const String dlg_with_bbcode = "[reveal]" + dialogue + "[/reveal]";
-	dialogue_label->set_text(dlg_with_bbcode);
+	dialogue_label->parse_bbcode(dlg_with_bbcode);
 }
 
 // increments the letter by determining how long the timer should be and restarting it, which will modify the RichTextEffectReveal in turn.
