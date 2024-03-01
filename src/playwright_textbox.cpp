@@ -129,21 +129,22 @@ void PlaywrightTextbox::increment_letter() {
 	letter_index++;
 
 	// once the letter index is equal or greater than the length of the dialogue, finish displaying.
-	if (letter_index >= dialogue.length()) {
+	String dlg_no_markup = dialogue_label->get_parsed_text();
+	UtilityFunctions::print(letter_index);
+	UtilityFunctions::print(dlg_no_markup.length());
+	UtilityFunctions::print("---------------");
+	if (letter_index >= dlg_no_markup.length() - 1) {
 		display_line();
 		return;
 	}
 
 	// determine the speed between character print-outs using a timer, and vary said timer's speed depending on punctuation, etc.
-	if (dialogue[letter_index] == '!' || dialogue[letter_index] == '.' || dialogue[letter_index] == ',' || dialogue[letter_index] == '?') {
-		if (letter_index < dialogue.length() - 2) {
-			letter_display_timer->start(punctuation_time);
-		}
-		else if (letter_index == dialogue.length() - 2) {
-			letter_display_timer->start(punctuation_time * 3.0);
-		}
+	char letter = dlg_no_markup[letter_index + 1];
+	if (letter == '!' || letter == '.' || letter == ',' || letter == '?') {
+		letter_display_timer->start(punctuation_time * 2.0);
+		UtilityFunctions::print("wth");
 	} 
-	else if (dialogue[letter_index] == ' ') {
+	else if (letter == ' ') {
 		letter_display_timer->start(space_time);
 	} 
 	else {
@@ -154,6 +155,7 @@ void PlaywrightTextbox::increment_letter() {
 // this function deems the entire dialogue line as displayed, meaning we can move onto the next line on the next key press.
 void PlaywrightTextbox::display_line() {
 	letter_display_timer->stop();
+	UtilityFunctions::print("finished displaying line!");
 	emit_signal("finished_displaying");
 }
 
