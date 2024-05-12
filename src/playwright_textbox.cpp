@@ -151,7 +151,6 @@ void PlaywrightTextbox::increment_letter() {
 // this function deems the entire dialogue line as displayed, meaning we can move onto the next line on the next key press.
 void PlaywrightTextbox::display_line() {
 	letter_display_timer->stop();
-	UtilityFunctions::print("finished displaying line!");
 	emit_signal("finished_displaying");
 }
 
